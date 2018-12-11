@@ -2,7 +2,7 @@
 
 ## 新建一个docker网络
 
-1.使用以下命令:
+1. 使用以下命令:
 
     ```docker network create nginx-ssl-proxy```
 
