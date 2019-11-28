@@ -1,4 +1,4 @@
-# 这是一个基于docker的自动配置ssl的nginx代理项目
+# 自动配置ssl的nginx反代docker-compose模板
 
 ## 新建一个docker网络
 
@@ -21,11 +21,12 @@
 
     services:
     example-app:
-        image: nginx:1.14.0-alpine
+        image: nginx:alpine
         expose:
         - 80
         environment:
         VIRTUAL_HOST: example.com
+        VIRTUAL_PORT: 80
         LETSENCRYPT_HOST: example.com
         LETSENCRYPT_EMAIL: foo@example.com
 
@@ -37,3 +38,8 @@
     ```
 
 2. 访问 example.com, 等待若干秒后, 查看 example.com 是否启用了`https`
+
+## 参阅
+
+- [https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion)
+- [https://github.com/jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy)

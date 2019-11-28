@@ -1,8 +1,8 @@
-version: '3'
+version: "3"
 
 services:
   nginx:
-    image: nginx:1.14.0-alpine
+    image: nginx:alpine
     container_name: nginx-proxy
     ports:
       - "80:80"
@@ -12,11 +12,9 @@ services:
       - ./vhost:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
       - ./certs:/etc/nginx/certs
-    labels:
-      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
 
   dockergen:
-    image: jwilder/docker-gen:0.7.3
+    image: jwilder/docker-gen
     container_name: nginx-proxy-gen
     depends_on:
       - nginx
@@ -38,6 +36,7 @@ services:
     environment:
       NGINX_PROXY_CONTAINER: nginx-proxy
       NGINX_DOCKER_GEN_CONTAINER: nginx-proxy-gen
+      DEFAULT_EMAIL: mail@yourdomain.tld
     volumes:
       - ./conf:/etc/nginx/conf.d
       - ./vhost:/etc/nginx/vhost.d
@@ -45,7 +44,7 @@ services:
       - ./certs:/etc/nginx/certs
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
-# Do not forget to 'docker network create nginx-ssl-proxy' before launch, and to add '--network nginx-ssl-proxy' to proxied containers. 
+# Do not forget to 'docker network create nginx-ssl-proxy' before launch, and to add '--network nginx-ssl-proxy' to proxied containers.
 
 networks:
   default:

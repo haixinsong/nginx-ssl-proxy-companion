@@ -1,4 +1,4 @@
-# This is a docker-based nginx proxy project that automatically configures ssl
+# A docker-compose tamplate that nginx reverse proxy with automatically configures ssl
 
 ## Create a docker network
 
@@ -21,11 +21,12 @@
 
     services:
     example-app:
-        image: nginx:1.14.0-alpine
+        image: nginx:alpine
         expose:
         - 80
         environment:
         VIRTUAL_HOST: example.com
+        VIRTUAL_PORT: 80
         LETSENCRYPT_HOST: example.com
         LETSENCRYPT_EMAIL: foo@example.com
 
@@ -37,3 +38,8 @@
     ```
 
 2. visit example.com and wait a few seconds to see if example.com has `https` enabled.
+
+## detail
+
+- [https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion)
+- [https://github.com/jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy)
