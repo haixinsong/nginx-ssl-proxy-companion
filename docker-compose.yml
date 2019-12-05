@@ -2,33 +2,33 @@ version: "3"
 
 services:
   nginx:
-    image: nginx:alpine
+    image: nediiii/nginx:alpine
     container_name: nginx-proxy
     ports:
       - "80:80"
       - "443:443"
     volumes:
+      - ./certs:/etc/nginx/certs
       - ./conf:/etc/nginx/conf.d
       - ./vhost:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
-      - ./certs:/etc/nginx/certs
 
   dockergen:
-    image: jwilder/docker-gen
+    image: nediiii/docker-gen:alpine
     container_name: nginx-proxy-gen
     depends_on:
       - nginx
     command: -notify-sighup nginx-proxy -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
     volumes:
+      - ./certs:/etc/nginx/certs
       - ./conf:/etc/nginx/conf.d
       - ./vhost:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
-      - ./certs:/etc/nginx/certs
-      - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
 
   letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    image: nediiii/letsencrypt-nginx-proxy-companion:alpine
     container_name: nginx-proxy-le
     depends_on:
       - nginx
@@ -38,10 +38,10 @@ services:
       NGINX_DOCKER_GEN_CONTAINER: nginx-proxy-gen
       DEFAULT_EMAIL: mail@yourdomain.tld
     volumes:
+      - ./certs:/etc/nginx/certs
       - ./conf:/etc/nginx/conf.d
       - ./vhost:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
-      - ./certs:/etc/nginx/certs
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 # Do not forget to 'docker network create nginx-ssl-proxy' before launch, and to add '--network nginx-ssl-proxy' to proxied containers.
